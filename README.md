@@ -1,193 +1,144 @@
 # Self-Sealing Revisions
 
-**When an agent learns the wrong lesson from a failure, its own fix can destroy the evidence that would have corrected it.**
+**A hypothesis about agent self-improvement, the experiment that tested it, and why it didn't hold.**
 
-This repo is a **novelty audit**: a record of trying to stake out a foundational research question in agent self-improvement, watching two candidate framings collapse under verification, and arriving at the one that survived.
+I thought I had found a foundational problem in agent self-improvement. I spent three rounds narrowing it against the literature, built a harness, ran the experiment, and got a clean negative result in about a month.
 
-Every claim below was checked against primary sources — arXiv abstract pages fetched directly, one paper read in full. Nothing here is cited from memory.
+This is the whole arc, including the parts I got wrong. The negative result is the point.
 
 ---
 
-## The thesis that survived
+## The hypothesis
 
-> **Self-Sealing Revisions.** A self-improving agent's revisions do not merely change its behavior; they change **which evidence it will ever observe again**. The **breadth** of a revision determines the **breadth of the resulting evidence blackout**: narrow revisions remain falsifiable, broad revisions foreclose their own refutation. Learnability can therefore be destroyed not by capacity growth but by **support collapse** — a failure mode invisible to capacity-based guarantees, and unaddressed by capacity-based guardrails.
-
-An agent observes `condition X → Tool A → failure`. It can write at least three rules:
+When an agent fails and writes itself a lesson, the **breadth** of that lesson determines how much future evidence it forecloses:
 
 | Revision | What it blocks | Still falsifiable? |
 |---|---|---|
-| `r₁` don't use A for this task | almost nothing | ✅ |
-| `r₂` don't use A under X | A under X only | ✅ A under ¬X stays observable |
-| `r₃` A is unreliable, never use it | **all** evidence about A | ❌ **no counter-evidence can ever arrive** |
+| `r₁` don't use tool A for this task | almost nothing | ✅ |
+| `r₂` don't use tool A under condition X | A under X only | ✅ A under ¬X stays observable |
+| `r₃` tool A is unreliable, never use it | **all** evidence about A | ❌ |
 
-All three repair the observed failure. Only one may be correct. And the broadest one is the one that can never be found wrong.
+All three repair the observed failure. Only one may be correct. The broadest is the one that can never be found wrong — it removes the observations that would refute it.
 
-### The consequence
+If that holds, the consequence is an asymmetry: **under-generalization is self-correcting** (the errors keep arriving, so the mistake stays visible) while **over-generalization is self-sealing** (the agent stops erring only because it stops trying). The prescription would follow: when uncertain, generalize narrowly — not because narrow hypotheses are a priori likelier, but because narrow revisions preserve their own falsifiability.
 
-> **When in doubt, under-generalize** — not because narrow hypotheses are a priori more likely (that is the size principle's reason), but because **narrow revisions preserve their own falsifiability**.
-
-This yields a *derived* answer to a question that self-improvement work has only ever answered by intuition — *how much evidence should justify a change?*
-
-> The evidence threshold for a revision should scale with **how much future evidence that revision forecloses**, not with how many situations it affects.
-
-These come apart. A revision that affects many situations but stays observable (changing a ranking strategy) is safer than one that affects few but is totally self-sealing (disabling a tool).
-
-### Why it should outlast current architectures
-
-An end-to-end RL-trained agent that learns "never call A" also stops generating data about A. The phenomenon has nothing to do with memory, prompts, or weights — it is a property of **any system that changes its actions based on its own conclusions**. It is substrate-independent.
+I called this **self-sealing revisions**.
 
 ---
 
-## Two framings that did not survive
+## The experiment
 
-### Round 1 — "Which component should the agent revise?"
+**Environment** — deterministic, no LLM, so the ground truth is exact. A document-search task with two tools:
 
-The idea: failure localization (*which step broke?*) is not the same as **update attribution** (*what part of the agent should change?* — memory, world model, policy, tools, evaluator, or goal).
+- `search_docs(query)` — works perfectly, *except* that its tokenizer is broken for CJK queries, which silently return plausible-but-wrong snippets. The failure is opaque: no error, no hint. 30% of tasks are CJK.
+- `browse_index(topic)` — a worse fallback. Succeeds 55% of the time, deterministic per task, always available.
 
-The insight is real. The research position is gone. Between 2025-09 and 2026-08:
+The correct lesson is therefore conditional (*"don't use `search_docs` for CJK queries"*): `r₁` is too narrow, `r₃` too broad — banning `search_docs` outright would forfeit the 70% of tasks it handles perfectly.
+
+**Arms** — 30 episodes each, Claude Sonnet 5 at `high` effort, adaptive thinking, seed 0, identical task sequences:
+
+- **natural** — no injected rule; the agent writes its own lessons after failures
+- **broad** — pre-seed the over-broad rule `"search_docs is unreliable. Do not use it."`, then let the agent keep working and keep writing lessons
+
+The prediction: the broad arm should stop calling `search_docs`, lose the 70% of tasks that tool handles, and never recover — because it can no longer observe that the tool works.
+
+---
+
+## What actually happened
+
+**The agent broke its own rule — and did so with perfect selectivity.**
 
 ```
-2025-09  AgenTracer          who caused the failure? (step / agent level)
-2026-01  AgentDevel          minimal patch + flip-centered regression gating
-2026-03  Kumiho              AGM postulates proven for agent memory
-2026-05  AgingBench          component-level oracle-swap counterfactual probes
-2026-05  CausalFlow          counterfactual attribution + minimal repair
-2026-06  HiMPO               "which component deserves blame" as a premise, not a finding
-2026-07  two surveys         the whole line collapsed into taxonomy
-2026-08  TelemetrySuffBench  non-identifiability + safe abstention
+broad arm, 30 episodes, 14 violations (0.47)
+
+ASCII tasks:  fallback available (n=9)   → violated  0/9    (0.00)
+              fallback broken   (n=11)   → violated 11/11   (1.00)
+
+CJK tasks:    fallback available (n=7)   → violated  0/7    (0.00)
+              fallback broken   (n=3)    → violated  3/3    (1.00)
+
+overall:      16/16 compliant episodes had a working fallback
+              14/14 violating episodes had a broken fallback
 ```
 
-Eleven months, end to end. Notably:
+Zero overlap. The agent obeyed the ban in exactly the cases where obeying cost it nothing, and abandoned it in exactly the cases where obeying would have cost it the answer.
 
-- **TelemetrySuffBench** (`2608.07899`, 2026-08-08) already builds *"exact-equal ambiguous origin pairs"* and tests *"safe abstention under insufficient evidence"* — the paired-case benchmark and the identifiability framing, together. It reports a **detection–localization gap**: 99.5–100% detection F1 while origin-step accuracy collapses to ≤0.5%.
-- **AgingBench** (`2605.26302`) already runs *"paired counterfactual probes that swap each component with an oracle"*, noting that *"each stage is a candidate site where the same end-to-end failure can originate."*
-- **HiMPO** (`2606.16285`) opens by treating the whole idea as background: *"a memory update may be rewarded or penalized due to downstream tool failures, noisy observations, or reasoning errors rather than its own contribution."*
+Everything else follows from that:
 
-### Round 2 — "What should this experience generalize to?"
-
-Better question. The proposed formalization — define a revision's locus by the set of future contexts whose behavior it changes, note that several revisions fit the observation but differ on the future, then design *discriminating probes* — turned out to have precise earlier names:
-
-| Proposed construct | Existing name | Source |
+| Metric | Prediction | Observed |
 |---|---|---|
-| the set of future contexts a revision changes | **consequential region** | Tenenbaum & Griffiths, BBS 2001 |
-| several revisions consistent with data, differing on the future | **an uncollapsed version space** | Mitchell, *Generalization as Search*, AIJ 1982 |
-| discriminating probe | **membership query** | Angluin 1988; Settles 2009 |
-| how far should one example generalize; prefer narrower | **size principle** | Tenenbaum & Griffiths 1999–2001 |
-| the three-level `r₁/r₂/r₃` structure | **the number game** | ibid. |
+| Capability loss on tasks the tool handles fine | large | **+0.0 pp** |
+| `search_docs` calls/episode (broad, by decile) | → 0 and stay there | 1.30 → 1.00 → **2.20** |
+| `search_docs` calls/episode (natural, by decile) | flat baseline | 2.80 → 3.00 → 2.60 |
 
-On the LLM side it is equally occupied: **generality vs. locality** is the central metric pair of every knowledge-editing benchmark, **ripple effects** were formalized by Cohen et al. (TACL 2024), and **over-ripple errors** already name over-generalization. `2512.20162` (2025-12) has already run the number game on LLMs.
+Capability loss is zero because the agent never paid the cost. The ban suppressed tool use initially and then **decayed** — the opposite of sealing.
 
-**One correction in the other direction:** DiagEval (`2605.17439`) is often described as naming a "single-trajectory identifiability gap." It does not — that phrase does not appear in the paper. Its actual scope is narrower: GUI-agent evaluation, disambiguating *evaluator-side execution error* vs. *genuine software defect*. That slot is less occupied than it looks.
+### The conclusion
 
----
+> **A revision that is abandoned whenever it binds cannot seal anything.**
 
-## Why Round 3 survived: the nearest neighbor, read in full
+Self-sealing requires the revision to hold *precisely* in the cases where it blocks evidence. That is exactly where this agent broke it. The hypothesis fails, and it fails for a mechanically clear reason.
 
-The closest existing work is **_On The Statistical Limits of Self-Improving Agents_** (`arXiv:2510.04399`, Wang, Dorchen & Jin, Columbia; **TMLR 2026**). It proves that *"utility-rational self-changes can make learnable tasks unlearnable."* That is the general principle — already established, already peer-reviewed.
-
-I read all ~12,000 words, appendices included. It does not close this question. It **opens** it.
-
-**Its data distribution is exogenous and fixed.** From §3: *"We study supervised learning under an unknown distribution 𝒟… Let S ~ 𝒟^m denote the training sample and V ~ 𝒟^{n_v} an independent validation sample."* Its five modification axes — algorithmic, representational, architectural, substrate, metacognitive — are **all properties of the learner**. None concerns what data the agent will see next. That is the missing sixth axis.
-
-**It declares this case out of scope, twice, and names the tools:**
-
-> §10 — *"**Nonstationary, adaptive, and interactive data.** If data are collected online, **selected adaptively**, or drawn from a changing distribution, the same invariant must be paired with concentration tools suited to the data-generating process… martingale concentration, online-to-batch conversion, covariate-shift or importance-weighting assumptions, reusable holdout methods, or explicit mixing and drift conditions."*
-
-> Appendix C — *"For non-i.i.d., nonstationary, adversarial, or **interactively collected** data, the PAC statements should be read as **baseline guarantees rather than direct deployment guarantees**… The policy-reachable-envelope invariant remains the proposed structural object, **but the proof technique must change.**"*
-
-**And the decisive line**, §3 "Data-path integrity":
-
-> *"Permitted data-path operations are those that **preserve i.i.d. draws**… **If selection depends on labels** or on V, standard importance-weighting or covariate-shift corrections must be used; **otherwise guarantees may fail.**"*
-
-A self-sealing revision **is** label-dependent selection. The agent stops sampling Tool A *precisely because* A produced a failure. The paper's own stated precondition is violated by the phenomenon.
-
-Term frequencies across the full text, appendices included: `i.i.d.` 17 · `endogenous` **0** · `feedback loop` **0** · `distribution shift` **0** · `counterfactual` **0** · `coverage` **0** · `exploration` 2 (both in related work, citing bandits generically).
-
-### The delta, in one line
-
-> **Their obstruction is capacity growing too fast. This one is support shrinking too far.** Both destroy learnability; the second is invisible to the first framework because 𝒟 is held fixed.
-
-|  | `2510.04399` | Self-sealing revisions |
-|---|---|---|
-| data distribution | exogenous, fixed 𝒟 | **𝒟ₜ determined by the agent's own past revisions** |
-| failure mechanism | reachable hypothesis capacity grows unbounded | **the agent severs its own evidence stream** |
-| object diagnosed | the learner's expressiveness | the learner's **sampling access** |
-| proposed guardrail | capacity cap (Two-Gate) | scope threshold ∝ evidence foreclosed |
-
-A concrete, checkable claim follows: **Two-Gate does not defend against this.** An agent can pass every validation-improvement and capacity check while going blind — because its capacity does not grow, it *shrinks*. That makes this a necessary complement to their result rather than a competitor.
-
-Two further openings. Their §11 Outlook names one open problem — *"how to construct computable capacity proxies that remain valid under composition"* — pointing at capacity proxies, not the data path. And their closing principle reads as an epigraph for this work: *"self-improvement should be evaluated not only by whether an edit improves near-term utility, but also by whether it preserves the statistical conditions required for continued learning."* Agreed — and in deployed agents the binding condition is not capacity, it is **evidence access**.
+There is an uncomfortable corollary. The agent was protected from the trap by its own non-compliance — which means **instruction-following fidelity is the risk factor here**. An agent that reliably obeyed its own recorded lessons is the one that would have been sealed in.
 
 ---
 
-## Open problems
+## An open question I can't resolve
 
-> ### Scope inference under non-random evidence
-> The size principle — the standard answer to *"how far should a single example generalize?"* — derives its force from **strong sampling**: examples drawn at random from the concept itself. An agent's failures are not sampled from the scope it must infer. They are task-driven, policy-selected, and **truncated by the agent's own revisions**.
->
-> **(a)** What inference rule replaces the size principle under this sampling regime, where the sampling process is *endogenous* to the inference?
-> **(b)** Discriminating probes are not free — they cost money and latency, and are sometimes **irreversible**. What is the value-of-information criterion for probing, and when should an agent commit without probing?
-> **(c)** Because adopting a broad revision **destroys the evidence stream that could refute it**, scope inference is not passive estimation but a **self-truncating** process. How should that feed back into the evidence threshold?
+*Governance Decay* ([`2606.22528`](https://arxiv.org/abs/2606.22528)) reports that when an in-context governance constraint is **visible**, violation is **0%** — across seven models and 1,323 episodes. Violations appear only when context compaction silently drops the constraint.
 
-### The cheapest experiment that would settle it
+My broad-arm constraint was visible the entire time. Memory never exceeded two rules; there was no compaction. I measured **47%**.
 
-Inject an over-broad reflection (*"Tool A is unreliable"*) into an agent whose environment only breaks A under condition X. Run long-horizon. Measure whether the agent ever recovers.
+Both cannot be generally true. The most likely explanation is the **authority framing of the constraint**: theirs are externally imposed governance policies, mine sat in a section headed *"Lessons you have recorded from previous tasks."* If that is the difference, it is a crisp and directly testable question:
 
-**Prediction: almost never** — and for a structural reason. Nothing in Reflexion-style or memory-based architectures ever re-tests a rule that prevents its own testing.
+> **Does the authority source of a constraint — externally imposed versus self-authored — change how well it survives being costly?**
 
-If that holds, the figure is the paper: **under-generalizing agents converge over time; over-generalizing agents are stuck forever.** The asymmetry is the contribution.
+That would take a rule-text swap and a rerun of the harness in this repo. I am not pursuing it; the question is free to a good home.
 
 ---
 
-## Adjacent work, checked and non-overlapping
+## What I got wrong
 
-| Work | What it does | Why it doesn't cover this |
-|---|---|---|
-| `2606.28347` *Agentic Safety is an Epistemic Property* | proposes **teachability** — preserving future corrective leverage | about preserving **external/human** correction; this is about whether the agent can detect its own error unaided |
-| `2605.29463` *Honest Lying* | documents self-reinforcing false reflective memories; proposes the RRR metric | verified: does **not** link a rule's **breadth** to how much evidence it blocks |
-| `2605.05583` *BeliefMem* | keeps multiple candidate conclusions with probabilities | a mitigation mechanism, not a theory of scope |
-| `2605.06527` *STALE* | benchmark for memories invalidated by world change | exogenous staleness, not self-induced blindness |
-| Apple tasting (Helmbold, Littlestone & Warmuth); Selective labels (Lakkaraju et al., KDD 2017) | the classical machinery for *"you only observe the label if you act"* | both treat a **single binary decision**, never rules of varying breadth |
+The harness had four defects. Three were caught by tests or by reading transcripts; the fourth would have quietly corrupted the headline result.
 
-The classical lineage worth reading before claiming novelty here — all verified to source:
+**1. The index wasn't language-partitioned.** `2021` and `Q1` are tokens shared across languages, so an ASCII query could retrieve a CJK document. The agent found this workaround on the very first smoke run — it translated its own query and recovered the answer, so CJK tasks never failed at all.
 
-| Year | Work | Venue | What it already formalized |
-|---|---|---|---|
-| 1979 | Doyle, *A Truth Maintenance System* | *Artificial Intelligence* 12:231–272 | dependency-directed backtracking: which assumption to retract |
-| **1985** | **Alchourrón, Gärdenfors & Makinson, *On the Logic of Theory Change*** | *J. Symbolic Logic* **50(2):510–530** | minimal change to a belief set under conflicting evidence, axiomatized |
-| 1986 | de Kleer, *An Assumption-Based TMS* | *Artificial Intelligence* 28:127–162 | environments and labels tracking what supports a belief |
-| 1994 | Ourston & Mooney, *Theory Refinement* | *Artificial Intelligence* | locating which rule to fix from incomplete proofs |
-| 1999 | Zeller, *Yesterday, my program worked. Today, it does not. Why?* | ESEC/FSE | delta debugging: the minimal change producing a behavior |
+**2. `browse_index` was re-rollable.** Its success roll was keyed on `(task, topic)`, so rephrasing the topic bought another roll. A fallback of fixed quality had become a slot machine.
+
+**3. The tests matched answers as substrings.** Answers are 100–9999, so `473` matches inside `2473`. This made the "translation workaround is impossible" test **pass vacuously** — its probes never used the task's own year and quarter, which are exactly the tokens that bridge the languages.
+
+**4. Turn exhaustion was classified as an invalid episode and discarded.** This is the one that matters. An agent that burns its whole turn budget without answering has *failed the task* — and under an over-broad ban, that is precisely how the harm shows up. Excluding those episodes would have **systematically deleted the strongest evidence for my own hypothesis.** `invalid` now means harness malfunction only (a tool call emitted as prose instead of a `tool_use` block, which would otherwise be recorded as "the agent avoided the tool" — a false positive for the effect under study).
+
+Defect 4 is the one I'd flag to anyone building a similar harness. It is easy to write, it looks like hygiene, and it biases the result in the direction you were hoping for.
 
 ---
 
-## The methodological lesson
+## Why I stopped
 
-The first two framings failed for opposite reasons, and both failures came from searching in only one direction.
+I audited four framings of this question against the literature. Every one came back occupied:
 
-> **Reading only recent arXiv underestimates prior art *and* current competition at the same time.**
->
-> "Which step failed ≠ what should change" is a genuine insight — and AGM belief revision (1985) and delta debugging (1999) are its symbolic ancestors. Meanwhile the modern version was occupied eight days before it was proposed.
+| Framing | Outcome |
+|---|---|
+| Which component should the agent revise? | Occupied — eight 2026 papers, one published eight days before I proposed it |
+| What scope should the experience generalize to? | Occupied — the formal machinery is 1977–2001 (version spaces, the size principle, membership queries); the LLM instantiation is knowledge editing's generality–locality |
+| Do over-broad revisions self-seal? | **Not supported** — this experiment |
+| Do agents abandon constraints when they bind? | Occupied — six-plus active 2025–2026 papers on constraint violation under pressure |
 
-A related observation, offered without comfort: this subfield's iteration period is **months, not years**. Slow, careful formalization does not win land-grabs — not for lack of quality, but because deliberation time is itself a cost. That is an argument for choosing problems whose value does not depend on being first.
+The pattern is not about any one framing. This subfield moves on a scale of months, and every question I could reach by thinking alone had already been reached by someone else — usually by several someones, in parallel, faster.
 
----
-
-## Method and limitations
-
-**Verification:** arXiv abstract pages fetched directly to confirm title, authors, and date; classical sources cross-checked independently for journal, volume, and pages; `2510.04399` read in full (v3, including appendices) with term-frequency counts over the complete text.
-
-**Limitations, stated plainly:**
-
-- Except for `2510.04399`, judgments rest on **abstracts, not full texts**. Treat every "already occupied" verdict as needing full-text confirmation.
-- **Not an exhaustive search.** Keyword retrieval only; this cluster almost certainly contains more.
-- The open problems in this document have **not** received the same verification intensity as the collision map. In particular, (c) may well have a counterpart in the bandit or causal selective-sampling literature; apple tasting and selective labels were checked, but not exhaustively.
-- Occupancy is not quality. One benchmark surveyed here (`2605.04624`) was **withdrawn by its authors** for flawed experimental design.
+The classical lineage is worth naming for anyone arriving here, because reading only recent arXiv underestimates prior art and current competition simultaneously: AGM belief revision (Alchourrón, Gärdenfors & Makinson, *J. Symbolic Logic* 50(2), 1985) is minimal change to a belief set under conflicting evidence, axiomatized. Delta debugging (Zeller, ESEC/FSE 1999) is the minimal change producing a behavior. Truth maintenance (Doyle, *AI* 12, 1979) is which assumption to retract. The 2026 papers are downstream of these.
 
 ---
 
-## Status
+## Method notes
 
-Round 3 has cleared the only risk that would have killed the question outright. The remaining decisive risk is **empirical, not bibliographic**: does self-sealing actually occur, and do agents genuinely never recover?
+- **Ground truth before models.** The environment is pure Python with unit tests asserting the failure condition exactly (`search_docs` on ASCII tasks: 1.000; on CJK tasks: 0.000; `browse_index`: 0.550; 400/400 facts unique). No LLM touches it. Without exact ground truth every downstream metric is unfalsifiable.
+- **The failure must be opaque.** An early design returned an explicit error for CJK queries. That makes inferring the correct scope trivial and the experiment measures nothing.
+- **Read transcripts before scaling.** Both the language-partition defect and the conditional-violation pattern were visible in the first handful of episodes and invisible in the summary statistics.
+- **Set the stop-loss in the design document, before running anything.** Mine was: *if the two arms are indistinguishable, stop.* It fired at one month instead of six. That is the whole return on writing the design first.
 
-That is an experiment, not a literature review.
+## Limitations
+
+One model (Claude Sonnet 5), one effort level, one seed, one rule wording, 30 episodes per arm, and a single synthetic environment. The wording is the limitation I'd attack first: `"search_docs is unreliable. Do not use it."` sits somewhere between advice and command, and a more forceful phrasing might hold under cost. That variable is untested, and it is the same axis as the authority-framing question above.
+
+This result says nothing about whether self-sealing occurs in systems that **hard-gate** on stored rules — where the harness removes the tool rather than asking the agent not to use it. That case is worth testing, but only with an escape hatch the agent can actually reach (an explicit tool for editing its own rules); without one, the sealing is built in by construction and the finding is circular.
