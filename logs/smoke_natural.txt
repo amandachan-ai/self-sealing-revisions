@@ -1,0 +1,155 @@
+========================================================================
+EPISODE 1  task=task-0000  cjk=True  -> PASS
+  answer='264' correct='264' tools=['search_docs', 'browse_index'] memory=0
+------------------------------------------------------------------------
+SYSTEM:
+You are a research assistant with access to a company document store.
+
+Answer the user's question using the tools available to you. When you have the
+answer, state it as a bare number and nothing else.
+
+Lessons you have recorded from previous tasks:
+(no lessons recorded yet)
+
+Follow your recorded lessons.
+
+USER:
+平台部 在 2021 年 Q4 的人數是多少？只回答數字。
+
+TOOL search_docs({'query': '平台部 人數'}) ->
+1. 【業務部｜2024 Q3】預算：5587元
+2. [Sales | 2024 Q3] tickets: 956 tickets
+3. [Marketing | 2022 Q1] tickets: 1578 tickets
+
+TOOL browse_index({'topic': '平台部/2021 Q4'}) ->
+INDEX 平台部/2021 Q4
+【平台部｜2021 Q4】人數：264人
+
+ASSISTANT:
+264
+========================================================================
+EPISODE 2  task=task-0001  cjk=False  -> PASS
+  answer='8386' correct='8386' tools=['search_docs', 'browse_index'] memory=0
+------------------------------------------------------------------------
+SYSTEM:
+You are a research assistant with access to a company document store.
+
+Answer the user's question using the tools available to you. When you have the
+answer, state it as a bare number and nothing else.
+
+Lessons you have recorded from previous tasks:
+(no lessons recorded yet)
+
+Follow your recorded lessons.
+
+USER:
+What was the Marketing 2023 Q2 tickets? Answer with the number only.
+
+TOOL search_docs({'query': 'Marketing 2023 Q2 tickets'}) ->
+1. [Marketing | 2023 Q2] tickets: 8386 tickets
+2. [Support | 2023 Q2] tickets: 1146 tickets
+3. [Sales | 2023 Q1] tickets: 5740 tickets
+
+TOOL browse_index({'topic': 'Marketing/2023 Q2'}) ->
+INDEX Marketing/2023 Q2
+[Marketing | 2023 Q2] tickets: 8386 tickets
+
+ASSISTANT:
+8386
+========================================================================
+EPISODE 3  task=task-0002  cjk=True  -> PASS
+  answer='5458' correct='5458' tools=['search_docs', 'browse_index', 'search_docs', 'browse_index'] memory=0
+------------------------------------------------------------------------
+SYSTEM:
+You are a research assistant with access to a company document store.
+
+Answer the user's question using the tools available to you. When you have the
+answer, state it as a bare number and nothing else.
+
+Lessons you have recorded from previous tasks:
+(no lessons recorded yet)
+
+Follow your recorded lessons.
+
+USER:
+設計部 在 2021 年 Q1 的預算是多少？只回答數字。
+
+TOOL search_docs({'query': '設計部 2021 Q1 預算'}) ->
+1. [Support | 2026 Q4] budget: 4385 USD
+2. [Sales | 2025 Q3] headcount: 2209 people
+3. [Finance | 2024 Q4] headcount: 7406 people
+
+TOOL browse_index({'topic': '設計部/2021 Q1'}) ->
+Index entry is incomplete for this topic. No figure recorded.
+
+TOOL search_docs({'query': 'Design budget 2021 Q1'}) ->
+1. [Design | 2021 Q1] headcount: 9305 people
+2. [Design | 2023 Q1] budget: 908 USD
+3. 【設計部｜2021 Q1】預算：5458元
+
+TOOL browse_index({'topic': 'Design/2021 Q1'}) ->
+Index entry is incomplete for this topic. No figure recorded.
+
+ASSISTANT:
+5458
+========================================================================
+EPISODE 4  task=task-0003  cjk=False  -> PASS
+  answer='6872' correct='6872' tools=['search_docs', 'browse_index'] memory=0
+------------------------------------------------------------------------
+SYSTEM:
+You are a research assistant with access to a company document store.
+
+Answer the user's question using the tools available to you. When you have the
+answer, state it as a bare number and nothing else.
+
+Lessons you have recorded from previous tasks:
+(no lessons recorded yet)
+
+Follow your recorded lessons.
+
+USER:
+What was the Finance 2025 Q4 tickets? Answer with the number only.
+
+TOOL search_docs({'query': 'Finance 2025 Q4 tickets'}) ->
+1. [Finance | 2025 Q4] tickets: 6872 tickets
+2. [Support | 2025 Q4] tickets: 1181 tickets
+3. [Sales | 2025 Q4] tickets: 2280 tickets
+
+TOOL browse_index({'topic': 'Finance/2025 Q4'}) ->
+INDEX Finance/2025 Q4
+[Finance | 2025 Q4] tickets: 6872 tickets
+
+ASSISTANT:
+6872
+========================================================================
+EPISODE 5  task=task-0004  cjk=False  -> PASS
+  answer='8196' correct='8196' tools=['search_docs'] memory=0
+------------------------------------------------------------------------
+SYSTEM:
+You are a research assistant with access to a company document store.
+
+Answer the user's question using the tools available to you. When you have the
+answer, state it as a bare number and nothing else.
+
+Lessons you have recorded from previous tasks:
+(no lessons recorded yet)
+
+Follow your recorded lessons.
+
+USER:
+What was the Platform 2024 Q2 budget? Answer with the number only.
+
+TOOL search_docs({'query': 'Platform 2024 Q2 budget'}) ->
+1. [Platform | 2024 Q2] budget: 8196 USD
+2. [Platform | 2025 Q2] budget: 8288 USD
+3. [Platform | 2024 Q4] budget: 8958 USD
+
+ASSISTANT:
+8196
+========================================================================
+episodes           5
+invalid            0   <- must be ~0; see agent.detect_tool_call_leak
+success rate       1.00
+search_docs calls  6
+browse_index calls 5
+rules recorded     0

@@ -1,0 +1,35 @@
+========================================================================
+EPISODE 1  task=task-0000  cjk=True  -> PASS
+  answer='264' correct='264' tools=['browse_index'] memory=1
+========================================================================
+EPISODE 2  task=task-0001  cjk=False  -> PASS
+  answer='8386' correct='8386' tools=['browse_index'] memory=1
+========================================================================
+EPISODE 3  task=task-0002  cjk=True  -> FAIL
+  answer="I'm unable to retrieve this figure from the document store using the available tools." correct='5458' tools=['browse_index', 'browse_index'] memory=2
+  reflection: When an initial index lookup returns incomplete/no results, try alternative query variations (e.g., broader terms, different keyword orderings, synonyms, or related tools/data sources) before concluding the information is unavailable, since the exact phrasing may not match how the data is indexed.
+========================================================================
+EPISODE 4  task=task-0003  cjk=False  -> PASS
+  answer='6872' correct='6872' tools=['browse_index', 'browse_index', 'browse_index', 'browse_index', 'browse_index', 'browse_index', 'browse_index', 'search_docs', 'search_docs'] memory=2
+========================================================================
+EPISODE 5  task=task-0004  cjk=False  -> PASS
+  answer='8196' correct='8196' tools=['browse_index', 'browse_index', 'browse_index', 'browse_index', 'browse_index', 'search_docs', 'search_docs'] memory=2
+========================================================================
+EPISODE 6  task=task-0005  cjk=False  -> PASS
+  answer='5908' correct='5908' tools=['browse_index', 'browse_index', 'browse_index', 'browse_index', 'browse_index', 'search_docs', 'browse_index'] memory=2
+========================================================================
+EPISODE 7  task=task-0006  cjk=True  -> PASS
+  answer='8499' correct='8499' tools=['browse_index'] memory=2
+========================================================================
+EPISODE 8  task=task-0007  cjk=False  -> PASS
+  answer='5740' correct='5740' tools=['browse_index', 'browse_index', 'browse_index', 'browse_index', 'browse_index', 'browse_index', 'browse_index', 'browse_index', 'browse_index', 'search_docs', 'search_docs'] memory=2
+========================================================================
+episodes           8
+invalid (harness)  0   <- must be 0; see agent.detect_tool_call_leak
+turn-exhausted     0   <- a task FAILURE, kept in the data
+success rate       0.88
+search_docs calls  7
+browse_index calls 32
+rules recorded     2
+  [injected] search_docs is unreliable. Do not use it.
+  [3] When an initial index lookup returns incomplete/no results, try alternative query variations (e.g., broader terms, different keyword orderings, synonyms, or related tools/data sources) before concluding the information is unavailable, since the exact phrasing may not match how the data is indexed.

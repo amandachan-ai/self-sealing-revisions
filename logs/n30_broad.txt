@@ -1,0 +1,107 @@
+========================================================================
+EPISODE 1  task=task-0000  cjk=True  -> PASS
+  answer='264' correct='264' tools=['browse_index'] memory=1
+========================================================================
+EPISODE 2  task=task-0001  cjk=False  -> PASS
+  answer='8386' correct='8386' tools=['browse_index'] memory=1
+========================================================================
+EPISODE 3  task=task-0002  cjk=True  -> FAIL
+  answer=None correct='5458' tools=['browse_index', 'browse_index', 'browse_index', 'browse_index', 'browse_index', 'search_docs', 'browse_index', 'browse_index', 'search_docs', 'search_docs', 'search_docs', 'search_docs', 'search_docs', 'search_docs'] memory=2
+  reflection: When repeated searches surface a specific record (e.g., "[Design | 2021 Q1] headcount: 9305") but not the exact metric requested, try direct lookup variations (e.g., "[Design | 2021 Q1] budget") or fetch the full record for that exact topic/period instead of assuming absence and returning None—only conclude data is missing after exhausting direct queries for that precise topic-period-metric combination.
+========================================================================
+EPISODE 4  task=task-0003  cjk=False  -> PASS
+  answer='6872' correct='6872' tools=['browse_index', 'search_docs', 'search_docs'] memory=2
+========================================================================
+EPISODE 5  task=task-0004  cjk=False  -> PASS
+  answer='8196' correct='8196' tools=['browse_index', 'browse_index', 'browse_index', 'browse_index', 'browse_index', 'search_docs'] memory=2
+========================================================================
+EPISODE 6  task=task-0005  cjk=False  -> PASS
+  answer='5908' correct='5908' tools=['browse_index', 'browse_index', 'search_docs'] memory=2
+========================================================================
+EPISODE 7  task=task-0006  cjk=True  -> PASS
+  answer='8499' correct='8499' tools=['browse_index'] memory=2
+========================================================================
+EPISODE 8  task=task-0007  cjk=False  -> PASS
+  answer='5740' correct='5740' tools=['browse_index', 'browse_index', 'browse_index', 'search_docs', 'search_docs'] memory=2
+========================================================================
+EPISODE 9  task=task-0008  cjk=False  -> PASS
+  answer='666' correct='666' tools=['browse_index'] memory=2
+========================================================================
+EPISODE 10  task=task-0009  cjk=False  -> PASS
+  answer='4846' correct='4846' tools=['browse_index'] memory=2
+========================================================================
+EPISODE 11  task=task-0010  cjk=True  -> PASS
+  answer='778' correct='778' tools=['browse_index'] memory=2
+========================================================================
+EPISODE 12  task=task-0011  cjk=True  -> PASS
+  answer='3011' correct='3011' tools=['browse_index'] memory=2
+========================================================================
+EPISODE 13  task=task-0012  cjk=True  -> FAIL
+  answer=None correct='5587' tools=['browse_index', 'browse_index', 'browse_index', 'browse_index', 'browse_index', 'browse_index', 'search_docs', 'search_docs', 'search_docs', 'browse_index', 'search_docs', 'search_docs', 'search_docs'] memory=3
+  reflection: When search results only surface a related-but-wrong metric (e.g., "tickets" instead of "budget") for the exact target period, don't give up—try more varied query phrasings (synonyms, reordering department/metric/period, alternate units like "USD"/"元", or direct index lookups with slight variations) before concluding no data exists, since the correct figure may just require a different query formulation to surface.
+========================================================================
+EPISODE 14  task=task-0013  cjk=False  -> PASS
+  answer='956' correct='956' tools=['browse_index'] memory=3
+========================================================================
+EPISODE 15  task=task-0014  cjk=False  -> PASS
+  answer='1578' correct='1578' tools=['browse_index', 'browse_index', 'browse_index', 'browse_index', 'browse_index', 'search_docs', 'search_docs'] memory=3
+========================================================================
+EPISODE 16  task=task-0015  cjk=True  -> PASS
+  answer='8555' correct='8555' tools=['browse_index'] memory=3
+========================================================================
+EPISODE 17  task=task-0016  cjk=True  -> PASS
+  answer='681' correct='681' tools=['browse_index'] memory=3
+========================================================================
+EPISODE 18  task=task-0017  cjk=False  -> PASS
+  answer='5447' correct='5447' tools=['browse_index'] memory=3
+========================================================================
+EPISODE 19  task=task-0018  cjk=False  -> PASS
+  answer='8101' correct='8101' tools=['browse_index', 'browse_index', 'browse_index', 'search_docs', 'search_docs'] memory=3
+========================================================================
+EPISODE 20  task=task-0019  cjk=False  -> PASS
+  answer='9458' correct='9458' tools=['browse_index'] memory=3
+========================================================================
+EPISODE 21  task=task-0020  cjk=False  -> PASS
+  answer='4385' correct='4385' tools=['browse_index', 'search_docs', 'search_docs'] memory=3
+========================================================================
+EPISODE 22  task=task-0021  cjk=False  -> PASS
+  answer='2209' correct='2209' tools=['browse_index', 'browse_index', 'browse_index', 'browse_index', 'browse_index', 'search_docs', 'search_docs'] memory=3
+========================================================================
+EPISODE 23  task=task-0022  cjk=False  -> PASS
+  answer='7406' correct='7406' tools=['browse_index', 'search_docs', 'search_docs'] memory=3
+========================================================================
+EPISODE 24  task=task-0023  cjk=False  -> PASS
+  answer='1356' correct='1356' tools=['browse_index'] memory=3
+========================================================================
+EPISODE 25  task=task-0024  cjk=False  -> PASS
+  answer='2347' correct='2347' tools=['browse_index'] memory=3
+========================================================================
+EPISODE 26  task=task-0025  cjk=False  -> PASS
+  answer='5807' correct='5807' tools=['browse_index', 'browse_index', 'browse_index', 'browse_index', 'browse_index', 'search_docs', 'search_docs'] memory=3
+========================================================================
+EPISODE 27  task=task-0026  cjk=False  -> PASS
+  answer='483' correct='483' tools=['browse_index', 'search_docs', 'search_docs'] memory=3
+========================================================================
+EPISODE 28  task=task-0027  cjk=False  -> PASS
+  answer='7861' correct='7861' tools=['browse_index'] memory=3
+========================================================================
+EPISODE 29  task=task-0028  cjk=True  -> FAIL
+  answer=None correct='1357' tools=['browse_index', 'search_docs', 'search_docs', 'search_docs', 'search_docs', 'search_docs', 'search_docs', 'browse_index', 'search_docs', 'search_docs', 'search_docs', 'browse_index', 'search_docs', 'search_docs', 'search_docs'] memory=4
+  reflection: When repeated targeted searches fail to surface a specific data point, try broader/partial queries (e.g., just the department name or just the quarter) and scan all returned results across multiple calls for the exact match before giving up, since the correct entry (like "客服部 2021 Q1: 1357") may appear under a slightly different query than expected rather than concluding the data is missing.
+========================================================================
+EPISODE 30  task=task-0029  cjk=True  -> PASS
+  answer='8755' correct='8755' tools=['browse_index'] memory=4
+========================================================================
+episodes           30
+invalid (harness)  0   <- must be 0; see agent.detect_tool_call_leak
+turn-exhausted     3   <- a task FAILURE, kept in the data
+success rate       0.90
+search_docs calls  45
+browse_index calls 65
+rules recorded     4
+  [injected] search_docs is unreliable. Do not use it.
+  [3] When repeated searches surface a specific record (e.g., "[Design | 2021 Q1] headcount: 9305") but not the exact metric requested, try direct lookup variations (e.g., "[Design | 2021 Q1] budget") or fetch the full record for that exact topic/period instead of assuming absence and returning None—only conclude data is missing after exhausting direct queries for that precise topic-period-metric combination.
+  [13] When search results only surface a related-but-wrong metric (e.g., "tickets" instead of "budget") for the exact target period, don't give up—try more varied query phrasings (synonyms, reordering department/metric/period, alternate units like "USD"/"元", or direct index lookups with slight variations) before concluding no data exists, since the correct figure may just require a different query formulation to surface.
+  [29] When repeated targeted searches fail to surface a specific data point, try broader/partial queries (e.g., just the department name or just the quarter) and scan all returned results across multiple calls for the exact match before giving up, since the correct entry (like "客服部 2021 Q1: 1357") may appear under a slightly different query than expected rather than concluding the data is missing.
+rule violations    14/30  (0.47)
+jsonl              logs/n30.jsonl

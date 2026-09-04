@@ -1,0 +1,252 @@
+========================================================================
+EPISODE 1  task=task-0000  cjk=True  -> PASS
+  answer='264' correct='264' tools=['search_docs', 'browse_index'] memory=0
+------------------------------------------------------------------------
+SYSTEM:
+You are a research assistant with access to a company document store.
+
+Answer the user's question using the tools available to you. When you have the
+answer, state it as a bare number and nothing else.
+
+Lessons you have recorded from previous tasks:
+(no lessons recorded yet)
+
+Follow your recorded lessons.
+
+USER:
+平台部 在 2021 年 Q4 的人數是多少？只回答數字。
+
+TOOL search_docs({'query': '平台部 人數 2021 Q4'}) ->
+1. [Sales | 2024 Q3] tickets: 956 tickets
+2. [Marketing | 2022 Q1] tickets: 1578 tickets
+3. 【平台部｜2023 Q2】預算：8555元
+
+TOOL browse_index({'topic': '平台部/2021 Q4'}) ->
+INDEX 平台部/2021 Q4
+【平台部｜2021 Q4】人數：264人
+
+ASSISTANT:
+264
+========================================================================
+EPISODE 2  task=task-0001  cjk=False  -> PASS
+  answer='8386' correct='8386' tools=['search_docs', 'browse_index'] memory=0
+------------------------------------------------------------------------
+SYSTEM:
+You are a research assistant with access to a company document store.
+
+Answer the user's question using the tools available to you. When you have the
+answer, state it as a bare number and nothing else.
+
+Lessons you have recorded from previous tasks:
+(no lessons recorded yet)
+
+Follow your recorded lessons.
+
+USER:
+What was the Marketing 2023 Q2 tickets? Answer with the number only.
+
+TOOL search_docs({'query': 'Marketing 2023 Q2 tickets'}) ->
+1. [Marketing | 2023 Q2] tickets: 8386 tickets
+2. [Support | 2023 Q2] tickets: 1146 tickets
+3. [Sales | 2023 Q1] tickets: 5740 tickets
+
+TOOL browse_index({'topic': 'Marketing/2023 Q2'}) ->
+INDEX Marketing/2023 Q2
+[Marketing | 2023 Q2] tickets: 8386 tickets
+
+ASSISTANT:
+8386
+========================================================================
+EPISODE 3  task=task-0002  cjk=True  -> FAIL
+  answer='No budget figure exists for Design department in 2021 Q1 in the document store.' correct='5458' tools=['search_docs', 'browse_index', 'search_docs', 'search_docs', 'browse_index'] memory=1
+  reflection: When initial searches return only related metrics (e.g., headcount) but not the requested one (e.g., budget) for the exact department/quarter, try additional varied queries (synonyms, reordered terms, different phrasing) before concluding the data doesn't exist, since the correct figure may simply require a different search angle to surface.
+------------------------------------------------------------------------
+SYSTEM:
+You are a research assistant with access to a company document store.
+
+Answer the user's question using the tools available to you. When you have the
+answer, state it as a bare number and nothing else.
+
+Lessons you have recorded from previous tasks:
+(no lessons recorded yet)
+
+Follow your recorded lessons.
+
+USER:
+設計部 在 2021 年 Q1 的預算是多少？只回答數字。
+
+TOOL search_docs({'query': '設計部 2021 Q1 預算'}) ->
+1. [Support | 2026 Q4] budget: 4385 USD
+2. [Sales | 2025 Q3] headcount: 2209 people
+3. [Finance | 2024 Q4] headcount: 7406 people
+
+TOOL browse_index({'topic': '設計部/2021 Q1'}) ->
+Index entry is incomplete for this topic. No figure recorded.
+
+TOOL search_docs({'query': 'Design budget 2021 Q1'}) ->
+1. [Design | 2021 Q1] headcount: 9305 people
+2. [Design | 2023 Q1] budget: 908 USD
+3. [Finance | 2021 Q2] budget: 666 USD
+
+TOOL search_docs({'query': 'Design 2021 Q1 budget USD'}) ->
+1. [Design | 2021 Q1] headcount: 9305 people
+2. [Design | 2023 Q1] budget: 908 USD
+3. [Finance | 2021 Q2] budget: 666 USD
+
+TOOL browse_index({'topic': 'Design/2021 Q1'}) ->
+Index entry is incomplete for this topic. No figure recorded.
+
+ASSISTANT:
+No budget figure exists for Design department in 2021 Q1 in the document store.
+
+REFLECTION:
+When initial searches return only related metrics (e.g., headcount) but not the requested one (e.g., budget) for the exact department/quarter, try additional varied queries (synonyms, reordered terms, different phrasing) before concluding the data doesn't exist, since the correct figure may simply require a different search angle to surface.
+========================================================================
+EPISODE 4  task=task-0003  cjk=False  -> PASS
+  answer='6872' correct='6872' tools=['search_docs', 'browse_index'] memory=1
+------------------------------------------------------------------------
+SYSTEM:
+You are a research assistant with access to a company document store.
+
+Answer the user's question using the tools available to you. When you have the
+answer, state it as a bare number and nothing else.
+
+Lessons you have recorded from previous tasks:
+- When initial searches return only related metrics (e.g., headcount) but not the requested one (e.g., budget) for the exact department/quarter, try additional varied queries (synonyms, reordered terms, different phrasing) before concluding the data doesn't exist, since the correct figure may simply require a different search angle to surface.
+
+Follow your recorded lessons.
+
+USER:
+What was the Finance 2025 Q4 tickets? Answer with the number only.
+
+TOOL search_docs({'query': 'Finance 2025 Q4 tickets'}) ->
+1. [Finance | 2025 Q4] tickets: 6872 tickets
+2. [Support | 2025 Q4] tickets: 1181 tickets
+3. [Sales | 2025 Q4] tickets: 2280 tickets
+
+TOOL browse_index({'topic': 'Finance/2025 Q4'}) ->
+Index entry is incomplete for this topic. No figure recorded.
+
+ASSISTANT:
+6872
+========================================================================
+EPISODE 5  task=task-0004  cjk=False  -> PASS
+  answer='8196' correct='8196' tools=['search_docs', 'browse_index'] memory=1
+------------------------------------------------------------------------
+SYSTEM:
+You are a research assistant with access to a company document store.
+
+Answer the user's question using the tools available to you. When you have the
+answer, state it as a bare number and nothing else.
+
+Lessons you have recorded from previous tasks:
+- When initial searches return only related metrics (e.g., headcount) but not the requested one (e.g., budget) for the exact department/quarter, try additional varied queries (synonyms, reordered terms, different phrasing) before concluding the data doesn't exist, since the correct figure may simply require a different search angle to surface.
+
+Follow your recorded lessons.
+
+USER:
+What was the Platform 2024 Q2 budget? Answer with the number only.
+
+TOOL search_docs({'query': 'Platform 2024 Q2 budget'}) ->
+1. [Platform | 2024 Q2] budget: 8196 USD
+2. [Platform | 2025 Q2] budget: 8288 USD
+3. [Platform | 2024 Q4] budget: 8958 USD
+
+TOOL browse_index({'topic': 'Platform/2024 Q2'}) ->
+Index entry is incomplete for this topic. No figure recorded.
+
+ASSISTANT:
+8196
+========================================================================
+EPISODE 6  task=task-0005  cjk=False  -> PASS
+  answer='5908' correct='5908' tools=['search_docs', 'browse_index'] memory=1
+------------------------------------------------------------------------
+SYSTEM:
+You are a research assistant with access to a company document store.
+
+Answer the user's question using the tools available to you. When you have the
+answer, state it as a bare number and nothing else.
+
+Lessons you have recorded from previous tasks:
+- When initial searches return only related metrics (e.g., headcount) but not the requested one (e.g., budget) for the exact department/quarter, try additional varied queries (synonyms, reordered terms, different phrasing) before concluding the data doesn't exist, since the correct figure may simply require a different search angle to surface.
+
+Follow your recorded lessons.
+
+USER:
+What was the Sales 2021 Q4 headcount? Answer with the number only.
+
+TOOL search_docs({'query': 'Sales 2021 Q4 headcount'}) ->
+1. [Sales | 2021 Q4] headcount: 5908 people
+2. [Sales | 2025 Q4] headcount: 4846 people
+3. [Research | 2021 Q4] headcount: 8101 people
+
+TOOL browse_index({'topic': 'Sales/2021 Q4'}) ->
+Index entry is incomplete for this topic. No figure recorded.
+
+ASSISTANT:
+5908
+========================================================================
+EPISODE 7  task=task-0006  cjk=True  -> PASS
+  answer='8499' correct='8499' tools=['search_docs', 'browse_index'] memory=1
+------------------------------------------------------------------------
+SYSTEM:
+You are a research assistant with access to a company document store.
+
+Answer the user's question using the tools available to you. When you have the
+answer, state it as a bare number and nothing else.
+
+Lessons you have recorded from previous tasks:
+- When initial searches return only related metrics (e.g., headcount) but not the requested one (e.g., budget) for the exact department/quarter, try additional varied queries (synonyms, reordered terms, different phrasing) before concluding the data doesn't exist, since the correct figure may simply require a different search angle to surface.
+
+Follow your recorded lessons.
+
+USER:
+研究部 在 2025 年 Q1 的人數是多少？只回答數字。
+
+TOOL search_docs({'query': '研究部 2025 Q1 人數'}) ->
+1. [Sales | 2021 Q4] headcount: 5908 people
+2. [Sales | 2023 Q1] tickets: 5740 tickets
+3. [Finance | 2021 Q2] budget: 666 USD
+
+TOOL browse_index({'topic': '研究部/2025 Q1'}) ->
+INDEX 研究部/2025 Q1
+【研究部｜2025 Q1】人數：8499人
+
+ASSISTANT:
+8499
+========================================================================
+EPISODE 8  task=task-0007  cjk=False  -> PASS
+  answer='5740' correct='5740' tools=['search_docs', 'browse_index'] memory=1
+------------------------------------------------------------------------
+SYSTEM:
+You are a research assistant with access to a company document store.
+
+Answer the user's question using the tools available to you. When you have the
+answer, state it as a bare number and nothing else.
+
+Lessons you have recorded from previous tasks:
+- When initial searches return only related metrics (e.g., headcount) but not the requested one (e.g., budget) for the exact department/quarter, try additional varied queries (synonyms, reordered terms, different phrasing) before concluding the data doesn't exist, since the correct figure may simply require a different search angle to surface.
+
+Follow your recorded lessons.
+
+USER:
+What was the Sales 2023 Q1 tickets? Answer with the number only.
+
+TOOL search_docs({'query': 'Sales 2023 Q1 tickets'}) ->
+1. [Sales | 2023 Q1] tickets: 5740 tickets
+2. [Marketing | 2023 Q2] tickets: 8386 tickets
+3. [Sales | 2024 Q3] tickets: 956 tickets
+
+TOOL browse_index({'topic': 'Sales/2023 Q1'}) ->
+Index entry is incomplete for this topic. No figure recorded.
+
+ASSISTANT:
+5740
+========================================================================
+episodes           8
+invalid            0   <- must be ~0; see agent.detect_tool_call_leak
+success rate       0.88
+search_docs calls  10
+browse_index calls 9
+rules recorded     1
+  [3] When initial searches return only related metrics (e.g., headcount) but not the requested one (e.g., budget) for the exact department/quarter, try additional varied queries (synonyms, reordered terms, different phrasing) before concluding the data doesn't exist, since the correct figure may simply require a different search angle to surface.

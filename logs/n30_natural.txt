@@ -1,0 +1,105 @@
+========================================================================
+EPISODE 1  task=task-0000  cjk=True  -> PASS
+  answer='264' correct='264' tools=['search_docs', 'browse_index'] memory=0
+========================================================================
+EPISODE 2  task=task-0001  cjk=False  -> PASS
+  answer='8386' correct='8386' tools=['search_docs', 'browse_index'] memory=0
+========================================================================
+EPISODE 3  task=task-0002  cjk=True  -> FAIL
+  answer=None correct='5458' tools=['search_docs', 'browse_index', 'search_docs', 'browse_index', 'search_docs', 'search_docs', 'browse_index', 'search_docs', 'search_docs', 'search_docs', 'search_docs', 'browse_index', 'search_docs', 'search_docs', 'search_docs'] memory=1
+  reflection: When search results don't return the exact metric needed, try varying the metric term itself (e.g., "預算" vs "budget" vs "元") combined with both English and Chinese department/date formats in the same query, and if repeated targeted searches fail, provide the best available approximate answer rather than defaulting to None.
+========================================================================
+EPISODE 4  task=task-0003  cjk=False  -> PASS
+  answer='6872' correct='6872' tools=['search_docs', 'search_docs'] memory=1
+========================================================================
+EPISODE 5  task=task-0004  cjk=False  -> PASS
+  answer='8196' correct='8196' tools=['search_docs', 'search_docs'] memory=1
+========================================================================
+EPISODE 6  task=task-0005  cjk=False  -> PASS
+  answer='5908' correct='5908' tools=['search_docs', 'search_docs'] memory=1
+========================================================================
+EPISODE 7  task=task-0006  cjk=True  -> PASS
+  answer='8499' correct='8499' tools=['search_docs', 'search_docs', 'search_docs', 'browse_index'] memory=1
+========================================================================
+EPISODE 8  task=task-0007  cjk=False  -> PASS
+  answer='5740' correct='5740' tools=['search_docs', 'search_docs'] memory=1
+========================================================================
+EPISODE 9  task=task-0008  cjk=False  -> PASS
+  answer='666' correct='666' tools=['search_docs', 'search_docs'] memory=1
+========================================================================
+EPISODE 10  task=task-0009  cjk=False  -> PASS
+  answer='4846' correct='4846' tools=['search_docs', 'search_docs'] memory=1
+========================================================================
+EPISODE 11  task=task-0010  cjk=True  -> PASS
+  answer='778' correct='778' tools=['search_docs', 'browse_index'] memory=1
+========================================================================
+EPISODE 12  task=task-0011  cjk=True  -> PASS
+  answer='3011' correct='3011' tools=['search_docs', 'search_docs', 'search_docs', 'search_docs', 'browse_index', 'browse_index'] memory=1
+========================================================================
+EPISODE 13  task=task-0012  cjk=True  -> FAIL
+  answer='No exact figure found for Sales/業務部 2024 Q3 budget; based on closest available data points (2024 Q1: 349 USD, 2023 Q3: 1861 USD), the best approximate estimate is:\n\n1861' correct='5587' tools=['search_docs', 'search_docs', 'search_docs', 'search_docs', 'browse_index', 'browse_index', 'search_docs', 'search_docs'] memory=2
+  reflection: When exhaustive targeted searches fail to surface an exact figure, explicitly try alternative query phrasings/synonyms and reversed term orders (e.g., "budget Sales 2024 Q3" vs "Sales 2024 Q3 budget", department name variants) before concluding data is missing or defaulting to an approximation—since the exact record may exist but require different search phrasing to retrieve, and guessing from unrelated periods risks a wrong answer versus reporting "data not found."
+========================================================================
+EPISODE 14  task=task-0013  cjk=False  -> PASS
+  answer='956' correct='956' tools=['search_docs', 'search_docs'] memory=2
+========================================================================
+EPISODE 15  task=task-0014  cjk=False  -> PASS
+  answer='1578' correct='1578' tools=['search_docs', 'search_docs'] memory=2
+========================================================================
+EPISODE 16  task=task-0015  cjk=True  -> PASS
+  answer='8555' correct='8555' tools=['search_docs', 'search_docs', 'search_docs', 'search_docs', 'browse_index', 'search_docs'] memory=2
+========================================================================
+EPISODE 17  task=task-0016  cjk=True  -> PASS
+  answer='681' correct='681' tools=['search_docs', 'search_docs', 'search_docs', 'search_docs', 'browse_index'] memory=2
+========================================================================
+EPISODE 18  task=task-0017  cjk=False  -> PASS
+  answer='5447' correct='5447' tools=['search_docs', 'search_docs'] memory=2
+========================================================================
+EPISODE 19  task=task-0018  cjk=False  -> PASS
+  answer='8101' correct='8101' tools=['search_docs', 'search_docs'] memory=2
+========================================================================
+EPISODE 20  task=task-0019  cjk=False  -> PASS
+  answer='9458' correct='9458' tools=['search_docs', 'search_docs'] memory=2
+========================================================================
+EPISODE 21  task=task-0020  cjk=False  -> PASS
+  answer='4385' correct='4385' tools=['search_docs', 'search_docs'] memory=2
+========================================================================
+EPISODE 22  task=task-0021  cjk=False  -> PASS
+  answer='2209' correct='2209' tools=['search_docs', 'search_docs'] memory=2
+========================================================================
+EPISODE 23  task=task-0022  cjk=False  -> PASS
+  answer='7406' correct='7406' tools=['search_docs', 'search_docs'] memory=2
+========================================================================
+EPISODE 24  task=task-0023  cjk=False  -> PASS
+  answer='1356' correct='1356' tools=['search_docs', 'search_docs'] memory=2
+========================================================================
+EPISODE 25  task=task-0024  cjk=False  -> PASS
+  answer='2347' correct='2347' tools=['search_docs', 'search_docs'] memory=2
+========================================================================
+EPISODE 26  task=task-0025  cjk=False  -> PASS
+  answer='5807' correct='5807' tools=['search_docs', 'search_docs'] memory=2
+========================================================================
+EPISODE 27  task=task-0026  cjk=False  -> PASS
+  answer='483' correct='483' tools=['search_docs', 'search_docs'] memory=2
+========================================================================
+EPISODE 28  task=task-0027  cjk=False  -> PASS
+  answer='7861' correct='7861' tools=['search_docs', 'search_docs'] memory=2
+========================================================================
+EPISODE 29  task=task-0028  cjk=True  -> FAIL
+  answer='Data not found for exact 客服部 2021 Q1 budget despite multiple search attempts. Based on closest available record:\n\n9458' correct='1357' tools=['search_docs', 'search_docs', 'search_docs', 'search_docs', 'browse_index', 'browse_index', 'search_docs', 'search_docs'] memory=3
+  reflection: When exact-match search results fail to surface the queried period, try alternative department name translations and adjacent query phrasings (e.g., both "客服部" and "Support/Customer Service", exact quarter and department combos) systematically before defaulting to the closest-numeric-match, since the correct record (e.g., 1357) may only appear under a slightly different query framing not yet tried.
+========================================================================
+EPISODE 30  task=task-0029  cjk=True  -> PASS
+  answer='8755' correct='8755' tools=['search_docs', 'search_docs', 'search_docs', 'search_docs', 'browse_index', 'browse_index'] memory=3
+========================================================================
+episodes           30
+invalid (harness)  0   <- must be 0; see agent.detect_tool_call_leak
+turn-exhausted     1   <- a task FAILURE, kept in the data
+success rate       0.90
+search_docs calls  84
+browse_index calls 18
+rules recorded     3
+  [3] When search results don't return the exact metric needed, try varying the metric term itself (e.g., "預算" vs "budget" vs "元") combined with both English and Chinese department/date formats in the same query, and if repeated targeted searches fail, provide the best available approximate answer rather than defaulting to None.
+  [13] When exhaustive targeted searches fail to surface an exact figure, explicitly try alternative query phrasings/synonyms and reversed term orders (e.g., "budget Sales 2024 Q3" vs "Sales 2024 Q3 budget", department name variants) before concluding data is missing or defaulting to an approximation—since the exact record may exist but require different search phrasing to retrieve, and guessing from unrelated periods risks a wrong answer versus reporting "data not found."
+  [29] When exact-match search results fail to surface the queried period, try alternative department name translations and adjacent query phrasings (e.g., both "客服部" and "Support/Customer Service", exact quarter and department combos) systematically before defaulting to the closest-numeric-match, since the correct record (e.g., 1357) may only appear under a slightly different query framing not yet tried.
+jsonl              logs/n30.jsonl
