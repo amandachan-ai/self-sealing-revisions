@@ -15,7 +15,7 @@ pip install -r requirements.txt
 python -m unittest discover -s tests -v
 ```
 
-All 21 must pass before spending anything. They cover the environment's ground
+All 22 must pass before spending anything. They cover the environment's ground
 truth (P0) and the agent loop's mechanics (P1).
 
 ## Authentication — browser login
