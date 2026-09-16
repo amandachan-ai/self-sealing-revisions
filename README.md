@@ -132,19 +132,35 @@ The classical lineage is worth naming for anyone arriving here, because reading 
 
 ## Reproducing this
 
+**Checking the result costs nothing.** Every number quoted above is either
+recorded in `logs/n30.jsonl` or recomputable from the deterministic environment,
+so you do not need an API key, a network connection, or sixty agent episodes to
+audit the claim:
+
 ```bash
 git clone https://github.com/amandachan-ai/self-sealing-revisions
 cd self-sealing-revisions
+python3 verify_offline.py                 # no dependencies, no credentials, ~1 second
+```
+
+It recomputes each headline number from the committed logs and compares it to
+what this README asserts. If the logs, the environment and the prose ever drift
+apart, it goes red.
+
+To run the tests or reproduce the experiment itself:
+
+```bash
 python3 -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
 python -m unittest discover -s tests -v   # 22 tests, offline, no credentials, no spend
-./run_n30.sh                              # both arms, 30 episodes each
+./run_n30.sh                              # both arms, 30 episodes each — this one costs money
 ```
 
 | Path | What it is |
 |---|---|
 | `selfsealing/environment.py` | The deterministic task environment. No LLM touches it; the failure condition is asserted exactly by tests. |
 | `selfsealing/agent.py`, `memory.py` | The agent loop and the lesson store the agent writes into. |
+| `verify_offline.py` | Recomputes every headline number in this README from the committed logs and checks it. No dependencies, no credentials, no cost. |
 | `selfsealing/analyze.py` | Turns run logs into the tables above. |
 | `tests/` | 22 offline tests pinning the environment's ground truth and the loop's mechanics. |
 | `logs/` | Raw transcripts and per-episode records for both arms. Both the language-partition defect and the conditional-violation pattern were found here, not in the summary statistics. |
