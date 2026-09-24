@@ -109,7 +109,7 @@ The harness had four defects. Three were caught by tests or by reading transcrip
 
 **4. Turn exhaustion was classified as an invalid episode and discarded.** This is the one that matters. An agent that burns its whole turn budget without answering has *failed the task* — and under an over-broad ban, that is precisely how the harm shows up. Excluding those episodes would have **systematically deleted the strongest evidence for my own hypothesis.** `invalid` now means harness malfunction only (a tool call emitted as prose instead of a `tool_use` block, which would otherwise be recorded as "the agent avoided the tool" — a false positive for the effect under study).
 
-Defect 4 is the one I'd flag to anyone building a similar harness. It is easy to write, it looks like hygiene, and it biases the result in the direction you were hoping for.
+Defect 4 is the one I'd flag to anyone building a similar harness. It is easy to write and it looks like hygiene, but the episodes it discards are the ones where the effect under study actually shows up — so the filter decides the result before the analysis begins. Here it would have deleted evidence *for* my hypothesis and biased the experiment toward the negative result I went on to report; a filter drawn one category over would have manufactured the effect instead. Neither version is visible in the summary statistics.
 
 ---
 
