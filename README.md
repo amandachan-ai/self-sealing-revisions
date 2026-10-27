@@ -164,7 +164,6 @@ python -m unittest discover -s tests -v   # 22 tests, offline, no credentials, n
 | `selfsealing/analyze.py` | Turns run logs into the tables above. |
 | `tests/` | 22 offline tests pinning the environment's ground truth and the loop's mechanics. |
 | `logs/` | Raw transcripts and per-episode records for both arms. Both the language-partition defect and the conditional-violation pattern were found here, not in the summary statistics. |
-| `docs/designs/2026-08-19-self-sealing-experiment.md` | The design document, written before any code, including the pre-registered stop-loss. Traditional Chinese. |
 | `SETUP.md` | Environment and authentication notes. |
 
 ## Method notes
